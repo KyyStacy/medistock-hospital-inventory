@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  VIEWER
+}
+
+enum Unit {
+  PCS
+  BOX
+  PACK
+  BOTTLE
+  UNIT
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model User {
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  password       String
+  role           Role            @default(VIEWER)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  stockMovements StockMovement[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Supplier {
+  id        String    @id @default(uuid())
+  name      String
+  phone     String?
+  email     String?
+  address   String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  products  Product[]
+
+  @@map("suppliers")
+}
+
+model Product {
+  id             String          @id @default(uuid())
+  sku            String          @unique
+  name           String
+  categoryId     String          @map("category_id")
+  supplierId     String          @map("supplier_id")
+  unit           Unit            @default(PCS)
+  minimumStock   Int             @default(0) @map("minimum_stock")
+  currentStock   Int             @default(0) @map("current_stock")
+  description    String?
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  category       Category        @relation(fields: [categoryId], references: [id])
+  supplier       Supplier        @relation(fields: [supplierId], references: [id])
+  stockMovements StockMovement[]
+
+  @@map("products")
+}
+
+model StockMovement {
+  id        String       @id @default(uuid())
+  productId String       @map("product_id")
+  type      MovementType
+  quantity  Int
+  notes     String?
+  createdBy String       @map("created_by")
+  createdAt DateTime     @default(now()) @map("created_at")
+  product   Product      @relation(fields: [productId], references: [id])
+  user      User         @relation(fields: [createdBy], references: [id])
+
+  @@map("stock_movements")
+}
