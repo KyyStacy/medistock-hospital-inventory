@@ -143,15 +143,15 @@ async function handleDelete() {
         <h2 class="text-2xl font-bold tracking-tight">Produk</h2>
         <p class="text-sm text-muted-foreground">Kelola produk inventaris rumah sakit</p>
       </div>
-      <button v-if="authStore.isAdmin" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]" @click="openCreateModal">
-        <Plus class="h-4 w-4" /> Tambah Produk
+      <button v-if="authStore.isAdmin" class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98] shadow-sm" @click="openCreateModal">
+        <Plus class="h-4 w-4" :stroke-width="1.5" /> Tambah Produk
       </button>
     </div>
 
     <div class="relative max-w-sm">
-      <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-      <input v-model="search" type="text" placeholder="Cari produk atau SKU..." class="h-10 w-full rounded-lg border border-input bg-background pl-10 pr-4 text-sm placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" />
-      <button v-if="search" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" @click="search = ''"><X class="h-4 w-4" /></button>
+      <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" :stroke-width="1.5" />
+      <input v-model="search" type="text" placeholder="Cari produk atau SKU..." class="h-9 w-full rounded-md border border-input bg-background pl-9 pr-4 text-sm placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-sm transition-colors" />
+      <button v-if="search" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" @click="search = ''"><X class="h-4 w-4" :stroke-width="1.5" /></button>
     </div>
 
     <LoadingSkeleton v-if="loading" :rows="5" :cols="6" />
@@ -160,45 +160,45 @@ async function handleDelete() {
       <button v-if="authStore.isAdmin" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground" @click="openCreateModal"><Plus class="h-4 w-4" /> Tambah Produk</button>
     </EmptyState>
 
-    <div v-else class="overflow-hidden rounded-xl border border-border bg-card">
+    <div v-else class="overflow-hidden rounded-md border border-border bg-card shadow-sm">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="px-5 py-3 text-left font-semibold text-muted-foreground">SKU</th>
-              <th class="px-5 py-3 text-left font-semibold text-muted-foreground">Nama Produk</th>
-              <th class="px-5 py-3 text-left font-semibold text-muted-foreground hidden md:table-cell">Kategori</th>
-              <th class="px-5 py-3 text-center font-semibold text-muted-foreground">Stok</th>
-              <th class="px-5 py-3 text-center font-semibold text-muted-foreground hidden sm:table-cell">Unit</th>
-              <th class="px-5 py-3 text-center font-semibold text-muted-foreground">Status</th>
-              <th class="px-5 py-3 text-right font-semibold text-muted-foreground">Aksi</th>
+              <th class="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-muted-foreground">SKU</th>
+              <th class="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Nama Produk</th>
+              <th class="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-muted-foreground hidden md:table-cell">Kategori</th>
+              <th class="px-4 py-2.5 text-center text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Stok</th>
+              <th class="px-4 py-2.5 text-center text-[11px] font-medium uppercase tracking-wider text-muted-foreground hidden sm:table-cell">Unit</th>
+              <th class="px-4 py-2.5 text-center text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Status</th>
+              <th class="px-4 py-2.5 text-right text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-border">
-            <tr v-for="p in products" :key="p.id" class="transition-colors hover:bg-muted/20">
-              <td class="px-5 py-3">
-                <code class="rounded bg-muted px-2 py-0.5 text-xs font-mono">{{ p.sku }}</code>
+            <tr v-for="p in products" :key="p.id" class="transition-colors duration-200 hover:bg-muted/30">
+              <td class="px-4 py-2.5">
+                <code class="rounded bg-muted px-1.5 py-0.5 text-[11px] font-mono border border-border/50">{{ p.sku }}</code>
               </td>
-              <td class="px-5 py-3">
-                <div class="font-medium text-foreground">{{ p.name }}</div>
-                <div class="text-xs text-muted-foreground md:hidden">{{ p.category?.name }}</div>
+              <td class="px-4 py-2.5">
+                <div class="font-medium text-foreground tracking-tight">{{ p.name }}</div>
+                <div class="text-[11px] text-muted-foreground md:hidden mt-0.5">{{ p.category?.name }}</div>
               </td>
-              <td class="px-5 py-3 text-muted-foreground hidden md:table-cell">{{ p.category?.name }}</td>
-              <td class="px-5 py-3 text-center">
-                <span :class="['font-semibold', p.currentStock <= p.minimumStock ? 'text-red-600' : 'text-foreground']">
+              <td class="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{{ p.category?.name }}</td>
+              <td class="px-4 py-2.5 text-center">
+                <span :class="['font-semibold tabular-nums', p.currentStock <= p.minimumStock ? 'text-destructive' : 'text-foreground']">
                   {{ p.currentStock }}
                 </span>
-                <span class="text-muted-foreground"> / {{ p.minimumStock }}</span>
+                <span class="text-muted-foreground tabular-nums text-xs"> / {{ p.minimumStock }}</span>
               </td>
-              <td class="px-5 py-3 text-center hidden sm:table-cell text-muted-foreground">{{ getUnitLabel(p.unit) }}</td>
-              <td class="px-5 py-3 text-center">
+              <td class="px-4 py-2.5 text-center hidden sm:table-cell text-muted-foreground">{{ getUnitLabel(p.unit) }}</td>
+              <td class="px-4 py-2.5 text-center">
                 <StatusBadge :type="getStockStatus(p.currentStock, p.minimumStock)" />
               </td>
-              <td class="px-5 py-3">
+              <td class="px-4 py-2.5">
                 <div class="flex items-center justify-end gap-1">
-                  <button class="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" @click="router.push(`/products/${p.id}`)" title="Detail"><Eye class="h-4 w-4" /></button>
-                  <button v-if="authStore.isAdmin" class="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" @click="openEditModal(p)" title="Edit"><Pencil class="h-4 w-4" /></button>
-                  <button v-if="authStore.isAdmin" class="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive" @click="openDeleteDialog(p)" title="Hapus"><Trash2 class="h-4 w-4" /></button>
+                  <button class="rounded p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:scale-95" @click="router.push(`/products/${p.id}`)" title="Detail"><Eye class="h-4 w-4" :stroke-width="1.5" /></button>
+                  <button v-if="authStore.isAdmin" class="rounded p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:scale-95" @click="openEditModal(p)" title="Edit"><Pencil class="h-4 w-4" :stroke-width="1.5" /></button>
+                  <button v-if="authStore.isAdmin" class="rounded p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive active:scale-95" @click="openDeleteDialog(p)" title="Hapus"><Trash2 class="h-4 w-4" :stroke-width="1.5" /></button>
                 </div>
               </td>
             </tr>

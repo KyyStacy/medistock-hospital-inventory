@@ -57,6 +57,7 @@ coverage/
 # Database / Prisma (Optional for local testing)
 *.db
 *.db-journal
+backend/prisma/migrations/
 
 # Vite / Vue
 *.local
